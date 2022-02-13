@@ -12,7 +12,7 @@ $server = IoServer::factory(
             new Server
         )
     ),
-    9111
+    PORT
 );
 
 $server->run();

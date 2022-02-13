@@ -2,7 +2,11 @@
     "autoload": {
         "psr-4": {
             "App\\": "src"
-        }
+        },
+        "files": [
+            "config.php",
+            "functions.php",
+        ]
     },
     "require": {
         "cboden/ratchet": "^0.4.4"
