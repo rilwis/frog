@@ -5,7 +5,7 @@
         },
         "files": [
             "config.php",
-            "functions.php",
+            "functions.php"
         ]
     },
     "require": {
