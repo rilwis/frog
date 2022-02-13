@@ -1,3 +1,4 @@
+<?php require dirname( __DIR__ ) . '/config.php'; ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,8 +16,8 @@
 		el.innerHTML += `<pre>${ data }</pre>`;
 	};
 
-	const conn = new WebSocket('ws://127.0.0.1:9111');
-	conn.onmessage = e => show( e.data );
+	const connection = new WebSocket('ws://<?= HOST ?>:<?= PORT ?>');
+	connection.onmessage = e => show( e.data );
 	</script>
 </body>
 </html>
