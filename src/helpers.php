@@ -1,9 +1,11 @@
 <?php
 if ( ! function_exists( 'frog' ) ) {
 	function frog( ...$variables ) {
-		wp_remote_post( HOST . ':' . PORT, [
-			'body' => $variables
+		$response = wp_remote_post( 'http://' . HOST . ':' . PORT, [
+			'headers' => [
+				'Content-Type' => 'application/json',
+			],
+			'body' => json_encode( $variables ),
 		] );
-		App\Client::send( ...$variables );
 	}
 }
