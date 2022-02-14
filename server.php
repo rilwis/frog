@@ -7,12 +7,12 @@ use App\Server;
 require __DIR__ . '/vendor/autoload.php';
 
 $server = IoServer::factory(
-    new HttpServer(
-        new WsServer(
-            new Server
-        )
-    ),
-    PORT
+	new HttpServer(
+		new WsServer(
+			new Server
+		)
+	),
+	PORT
 );
 
 $server->run();

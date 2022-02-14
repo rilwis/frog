@@ -2,44 +2,46 @@
 namespace App;
 use Ratchet\MessageComponentInterface;
 use Ratchet\ConnectionInterface;
+use Riimu\Kit\PHPEncoder\PHPEncoder;
+use SplObjectStorage;
+use Exception;
 
 class Server implements MessageComponentInterface {
-    protected $clients;
+	protected $clients;
 
-    public function __construct() {
-        $this->clients = new \SplObjectStorage;
-    }
+	public function __construct() {
+		$this->clients = new SplObjectStorage;
+	}
 
-    public function onOpen(ConnectionInterface $conn) {
-        // Store the new connection to send messages to later
-        $this->clients->attach($conn);
+	public function onOpen( ConnectionInterface $connection ) {
+		$this->clients->attach( $connection );
+	}
 
-        echo "New connection! ({$conn->resourceId})\n";
-    }
+	public function onMessage( ConnectionInterface $from, $message ) {
+		$variables = json_decode( $message, true );
 
-    public function onMessage(ConnectionInterface $from, $msg) {
-        $numRecv = count($this->clients) - 1;
-        echo sprintf('Connection %d sending message "%s" to %d other connection%s' . "\n"
-            , $from->resourceId, $msg, $numRecv, $numRecv == 1 ? '' : 's');
+		ob_start();
+		$encoder = new PHPEncoder;
+		foreach ( $variables as $variable ) {
+			echo $encoder->encode( $variable ), "\n";
+		}
+		$message = ob_get_clean();
 
-        foreach ($this->clients as $client) {
-            if ($from !== $client) {
-                // The sender is not the receiver, send to each client connected
-                $client->send($msg);
-            }
-        }
-    }
+		// Output to terminal.
+		echo "\n", str_repeat( '-', 40 ), "\n", $message, "\n";
 
-    public function onClose(ConnectionInterface $conn) {
-        // The connection is closed, remove it, as we can no longer send it messages
-        $this->clients->detach($conn);
+		foreach ( $this->clients as $client ) {
+			if ( $from !== $client ) {
+				$client->send( $message );
+			}
+		}
+	}
 
-        echo "Connection {$conn->resourceId} has disconnected\n";
-    }
+	public function onClose( ConnectionInterface $connection ) {
+		$this->clients->detach( $connection );
+	}
 
-    public function onError(ConnectionInterface $conn, \Exception $e) {
-        echo "An error has occurred: {$e->getMessage()}\n";
-
-        $conn->close();
-    }
+	public function onError( ConnectionInterface $connection, Exception $e ) {
+		$connection->close();
+	}
 }

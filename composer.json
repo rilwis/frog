@@ -5,12 +5,13 @@
         },
         "files": [
             "config.php",
-            "src/helpers.php"
+            "helpers.php"
         ]
     },
     "require": {
         "cboden/ratchet": "^0.4.4",
         "react/http": "^1.6",
-        "riimu/kit-phpencoder": "^2.4"
+        "riimu/kit-phpencoder": "^2.4",
+        "textalk/websocket": "^1.5"
     }
 }
