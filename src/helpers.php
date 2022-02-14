@@ -1,7 +1,7 @@
 <?php
-if ( ! function_exists( 'frog' ) ) {
-	function frog( ...$variables ) {
-		$response = wp_remote_post( 'http://' . HOST . ':' . PORT, [
+if ( ! function_exists( 'f' ) ) {
+	function f( ...$variables ) {
+		wp_remote_post( 'http://' . HOST . ':' . PORT, [
 			'headers' => [
 				'Content-Type' => 'application/json',
 			],
