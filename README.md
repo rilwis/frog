@@ -6,7 +6,7 @@ Until Frog!
 
 Frog creates a socket that always listen to debug requests and show the information about the variables it receives. It doesn't interrupt your process or output anything in your app. Instead it outputs data in the terminal and (optional) browser.
 
-### Features
+## Features
 
 - Simple
 - Supports syntax highligting when viewing the data from the browser
