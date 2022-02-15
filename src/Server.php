@@ -27,7 +27,7 @@ class Server implements MessageComponentInterface {
 		foreach ( $variables as $variable ) {
 			$output[] = $this->encoder->encode( $variable );
 		}
-		echo "\n", str_repeat( '-', 40 ), "\n\n", implode( "\n", $output ), "\n";
+		echo "\n", str_repeat( '-', 40 ), "\n\n", implode( "\n\n", $output ), "\n";
 
 		// Output to the browser.
 		$output = [];
