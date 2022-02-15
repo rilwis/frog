@@ -23,17 +23,18 @@ class Server implements MessageComponentInterface {
 		$variables = json_decode( $message, true );
 
 		// Output to terminal.
-		$output = '';
+		$output = [];
 		foreach ( $variables as $variable ) {
-			$output .= $this->encoder->encode( $variable ) . "\n\n";
+			$output[] = $this->encoder->encode( $variable );
 		}
-		echo "\n", str_repeat( '-', 40 ), "\n\n", $output, "\n";
+		echo "\n", str_repeat( '-', 40 ), "\n\n", implode( "\n", $output ), "\n";
 
 		// Output to the browser.
-		$output = '';
+		$output = [];
 		foreach ( $variables as $variable ) {
-			$output .= $this->highlight( $this->encoder->encode( $variable ) ) . "\n\n";
+			$output[] = $this->highlight( $this->encoder->encode( $variable ) );
 		}
+		$output = implode( "\n\n", $output );
 		foreach ( $this->clients as $client ) {
 			if ( $from !== $client ) {
 				$client->send( $output );
