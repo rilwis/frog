@@ -34,4 +34,4 @@ If you open the browser, the debug info is automatically appears in the browser 
 
 ## Sending data to Frog
 
-Currently, we support WordPress. To send debug data from WordPress to Frog, please see [`frog-wp`](https://github.com/rilwis/frog-wp.git) repo.
+Currently, we support WordPress. To send debug data from WordPress to Frog, please see [`frog-wp`](https://github.com/rilwis/frog-wp) repo.
