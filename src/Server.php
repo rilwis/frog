@@ -22,19 +22,26 @@ class Server implements MessageComponentInterface {
 	public function onMessage( ConnectionInterface $from, $message ) {
 		$variables = json_decode( $message, true );
 
+		// First parameter is the caller in format $file:$line.
+		$caller = array_shift( $variables );
+
 		// Output to terminal.
 		$output = [];
 		foreach ( $variables as $variable ) {
 			$output[] = $this->encoder->encode( $variable );
 		}
-		echo "\n", str_repeat( '-', 40 ), "\n\n", implode( "\n\n", $output ), "\n";
+		echo "\n", implode( "\n\n", [
+			str_repeat( '-', 40 ),
+			"#$caller",
+			implode( "\n\n", $output ),
+		] ), "\n";
 
 		// Output to the browser.
 		$output = [];
 		foreach ( $variables as $variable ) {
 			$output[] = $this->highlight( $this->encoder->encode( $variable ) );
 		}
-		$output = implode( "\n\n", $output );
+		$output = "<span class='caller'>$caller</span>" . implode( "\n\n", $output );
 		foreach ( $this->clients as $client ) {
 			if ( $from !== $client ) {
 				$client->send( $output );
