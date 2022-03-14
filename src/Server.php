@@ -32,16 +32,16 @@ class Server implements MessageComponentInterface {
 		}
 		echo "\n", implode( "\n\n", [
 			str_repeat( '-', 40 ),
-			"#$caller",
+			"# $caller",
 			implode( "\n\n", $output ),
 		] ), "\n";
 
 		// Output to the browser.
 		$output = [];
 		foreach ( $variables as $variable ) {
-			$output[] = $this->highlight( $this->encoder->encode( $variable ) );
+			$output[] = $this->encoder->encode( $variable );
 		}
-		$output = "<span class='caller'>$caller</span>" . implode( "\n\n", $output );
+		$output = "$caller###" . implode( "\n\n", $output );
 		foreach ( $this->clients as $client ) {
 			if ( $from !== $client ) {
 				$client->send( $output );
@@ -55,22 +55,5 @@ class Server implements MessageComponentInterface {
 
 	public function onError( ConnectionInterface $connection, Exception $e ) {
 		$connection->close();
-	}
-
-	/**
-	 * @link https://www.php.net/highlight_string
-	 */
-	private function highlight( $text ) {
-		$text = trim( $text );
-		$text = highlight_string( "<?php " . $text, true );  // highlight_string() requires opening PHP tag or otherwise it will not colorize the text
-		$text = trim( $text );
-		$text = preg_replace( "|^\\<code\\>\\<span style\\=\"color\\: #[a-fA-F0-9]{0,6}\"\\>|", "", $text, 1 );  // remove prefix
-		$text = preg_replace( "|\\</code\\>\$|", "", $text, 1 );  // remove suffix 1
-		$text = trim( $text );  // remove line breaks
-		$text = preg_replace( "|\\</span\\>\$|", "", $text, 1 );  // remove suffix 2
-		$text = trim( $text );  // remove line breaks
-		$text = preg_replace( "|^(\\<span style\\=\"color\\: #[a-fA-F0-9]{0,6}\"\\>)(&lt;\\?php&nbsp;)(.*?)(\\</span\\>)|", "\$1\$3\$4", $text );  // remove custom added "<?php "
-
-		return $text;
 	}
 }
